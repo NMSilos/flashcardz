@@ -7,17 +7,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "decks")
+@Table(name = "cards")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Deck {
+public class Card {
 
     @Id
     @GeneratedValue
@@ -29,17 +27,15 @@ public class Deck {
     )
     private UUID id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Column(nullable = false)
+    private String front;
 
-    private Date creationDate;
+    @Column(nullable = false)
+    private String back;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @OneToMany(mappedBy = "deck", cascade = CascadeType.REMOVE)
-    private List<Card> cards;
+    @JoinColumn(name = "deck_id")
+    private Deck deck;
 
     @PrePersist
     public void prePersist() {
