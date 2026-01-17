@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<User> getUserById(@RequestBody User user) {
+    public ResponseEntity<User> update(@RequestBody User user) {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(user));
     }
 

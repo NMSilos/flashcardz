@@ -1,22 +1,21 @@
 package com.github.nmsilos.cardzbackend.model;
 
-import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
+@Table(name = "decks")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class Deck {
 
     @Id
     @GeneratedValue
@@ -28,22 +27,13 @@ public class User {
     )
     private UUID id;
 
-    @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
     @Column(nullable = false, unique = true)
-    private String email;
+    private String name;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Deck> decks;
+    private Date creationDate;
 
-    @PrePersist
-    public void prePersist() {
-        if (id == null) {
-            id = UuidCreator.getTimeOrderedEpoch();
-        }
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
