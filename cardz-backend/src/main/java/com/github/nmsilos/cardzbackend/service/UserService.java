@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class UserService {
 
@@ -14,11 +16,26 @@ public class UserService {
 
     @Transactional
     public User register(User user) {
-        User newUser = new User();
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(user.getPassword());
-        newUser.setEmail(user.getEmail());
-        repository.save(newUser);
-        return newUser;
+        return repository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserById(UUID id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public User update(User user) {
+        User oldUser = repository.findById(user.getId()).orElseThrow(null);
+        oldUser.setUsername(user.getUsername());
+        oldUser.setEmail(user.getEmail());
+        oldUser.setPassword(user.getPassword());
+        return repository.save(oldUser);
+    }
+
+    @Transactional
+    public Void delete(UUID id) {
+        repository.deleteById(id);
+        return null;
     }
 }
