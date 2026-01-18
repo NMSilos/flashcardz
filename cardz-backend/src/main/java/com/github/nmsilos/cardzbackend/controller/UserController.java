@@ -1,8 +1,7 @@
 package com.github.nmsilos.cardzbackend.controller;
 
-import com.github.nmsilos.cardzbackend.dto.user.UserRegisterDTO;
+import com.github.nmsilos.cardzbackend.dto.user.UserRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
-import com.github.nmsilos.cardzbackend.model.User;
 import com.github.nmsilos.cardzbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,17 +18,17 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRegisterDTO user) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRequestDTO user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.register(user));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getUserById(id));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<User> update(@RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> update(@RequestBody UserRequestDTO user) {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(user));
     }
 

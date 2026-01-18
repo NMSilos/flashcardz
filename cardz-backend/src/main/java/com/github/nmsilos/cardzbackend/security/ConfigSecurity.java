@@ -34,10 +34,13 @@ public class ConfigSecurity {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors ->  cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> {
+                /*.authorizeHttpRequests(auth -> {
                     auth.requestMatchers(HttpMethod.POST,"/api/users/register").permitAll()
+                            .requestMatchers(HttpMethod.GET,"/api/users/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT,"/api/users/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE,"/api/users/**").permitAll()
                             .anyRequest().authenticated();
-                })
+                })*/
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
