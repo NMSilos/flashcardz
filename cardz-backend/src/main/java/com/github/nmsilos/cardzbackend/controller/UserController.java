@@ -1,5 +1,7 @@
 package com.github.nmsilos.cardzbackend.controller;
 
+import com.github.nmsilos.cardzbackend.dto.user.UserRegisterDTO;
+import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
 import com.github.nmsilos.cardzbackend.model.User;
 import com.github.nmsilos.cardzbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class UserController {
     private UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRegisterDTO user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.register(user));
     }
 

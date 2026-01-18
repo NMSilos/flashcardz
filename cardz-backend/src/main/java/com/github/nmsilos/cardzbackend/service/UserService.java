@@ -1,7 +1,11 @@
 package com.github.nmsilos.cardzbackend.service;
 
+import com.github.nmsilos.cardzbackend.dto.user.UserRegisterDTO;
+import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
+import com.github.nmsilos.cardzbackend.mapper.UserMapper;
 import com.github.nmsilos.cardzbackend.model.User;
 import com.github.nmsilos.cardzbackend.repository.UserRepository;
+import com.github.nmsilos.cardzbackend.security.Cripter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,9 +18,15 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private UserMapper mapper;
+
     @Transactional
-    public User register(User user) {
-        return repository.save(user);
+    public UserResponseDTO register(UserRegisterDTO user) {
+        User newUser = mapper.toEntity(user);
+        newUser.setPassword(Cripter.criptografar(user.getPassword()));
+        repository.save(newUser);
+        return mapper.toResponse(newUser);
     }
 
     @Transactional(readOnly = true)
