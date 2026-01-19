@@ -1,5 +1,7 @@
 package com.github.nmsilos.cardzbackend.controller;
 
+import com.github.nmsilos.cardzbackend.dto.deck.DeckRequestDTO;
+import com.github.nmsilos.cardzbackend.dto.deck.DeckResponseDTO;
 import com.github.nmsilos.cardzbackend.model.Deck;
 import com.github.nmsilos.cardzbackend.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ public class DeckController {
     private DeckService service;
 
     @PostMapping("/create")
-    private ResponseEntity<Deck> create(@RequestBody Deck deck) {
+    private ResponseEntity<DeckResponseDTO> create(@RequestBody DeckRequestDTO deck) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(deck));
     }
 

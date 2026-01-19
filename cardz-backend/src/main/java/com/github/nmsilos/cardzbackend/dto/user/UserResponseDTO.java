@@ -1,6 +1,6 @@
 package com.github.nmsilos.cardzbackend.dto.user;
 
-import com.github.nmsilos.cardzbackend.model.Deck;
+import com.github.nmsilos.cardzbackend.dto.deck.DeckResponseDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +14,6 @@ public class UserResponseDTO {
     private UUID id;
     private String username;
     private String email;
-    private List<Deck> decks;
+    private List<DeckResponseDTO> decks;
 
 }

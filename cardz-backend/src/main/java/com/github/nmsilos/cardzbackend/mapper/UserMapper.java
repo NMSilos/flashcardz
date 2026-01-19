@@ -5,7 +5,7 @@ import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
 import com.github.nmsilos.cardzbackend.model.User;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = DeckMapper.class)
 public interface UserMapper {
 
     User toEntity(UserRequestDTO user);

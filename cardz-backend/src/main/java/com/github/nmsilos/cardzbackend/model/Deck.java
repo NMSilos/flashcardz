@@ -21,7 +21,6 @@ import java.util.UUID;
 public class Deck {
 
     @Id
-    @GeneratedValue
     @Column(
             name = "id",
             columnDefinition = "BINARY(16)",
@@ -40,13 +39,6 @@ public class Deck {
     private User user;
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.REMOVE)
-    private List<Card> cards;
-
-    @PrePersist
-    public void prePersist() {
-        if (id == null) {
-            id = UuidCreator.getTimeOrderedEpoch();
-        }
-    }
+    private List<Card> cards = new ArrayList<>();
 
 }

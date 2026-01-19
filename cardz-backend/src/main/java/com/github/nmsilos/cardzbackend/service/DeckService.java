@@ -1,5 +1,11 @@
 package com.github.nmsilos.cardzbackend.service;
 
+import com.github.f4b6a3.uuid.UuidCreator;
+import com.github.nmsilos.cardzbackend.dto.deck.DeckRequestDTO;
+import com.github.nmsilos.cardzbackend.dto.deck.DeckResponseDTO;
+import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
+import com.github.nmsilos.cardzbackend.mapper.DeckMapper;
+import com.github.nmsilos.cardzbackend.mapper.UserMapper;
 import com.github.nmsilos.cardzbackend.model.Deck;
 import com.github.nmsilos.cardzbackend.model.User;
 import com.github.nmsilos.cardzbackend.repository.DeckRepository;
@@ -20,12 +26,18 @@ public class DeckService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private DeckMapper mapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
+
     @Transactional
-    public Deck create(Deck deck) {
-        User user = userRepository.getReferenceById(deck.getUser().getId());
-        deck.setCreationDate(new Date());
-        deck.setUser(user);
-        return repository.save(deck);
+    public DeckResponseDTO create(DeckRequestDTO deck) {
+        Deck newDeck = buildDeck(deck);
+        repository.save(newDeck);
+        return mapper.toResponse(newDeck);
     }
 
     @Transactional(readOnly = true)
@@ -44,4 +56,15 @@ public class DeckService {
     public void delete(UUID id) {
         repository.deleteById(id);
     }
+
+    private Deck buildDeck(DeckRequestDTO dto) {
+        Deck deck = mapper.toEntity(dto);
+
+        deck.setId(UuidCreator.getTimeOrderedEpoch());
+        deck.setCreationDate(new Date());
+        deck.setUser(userRepository.getReferenceById(dto.getUser().getId()));
+
+        return deck;
+    }
+
 }
