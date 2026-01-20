@@ -3,6 +3,7 @@ package com.github.nmsilos.cardzbackend.service;
 import com.github.nmsilos.cardzbackend.dto.user.UserRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
 import com.github.nmsilos.cardzbackend.exception.custom.RequiredFieldMissingException;
+import com.github.nmsilos.cardzbackend.exception.custom.ResourceNotFoundException;
 import com.github.nmsilos.cardzbackend.mapper.UserMapper;
 import com.github.nmsilos.cardzbackend.model.User;
 import com.github.nmsilos.cardzbackend.repository.UserRepository;
@@ -38,7 +39,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponseDTO getUserById(UUID id) {
-        User user = repository.findById(id).orElse(null);
+        User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return mapper.toResponse(user);
     }
 
@@ -55,7 +56,7 @@ public class UserService {
             repository.save(oldUser);
             return mapper.toResponse(oldUser);
         } else {
-            return null;
+            throw new ResourceNotFoundException("User not found");
         }
     }
 
