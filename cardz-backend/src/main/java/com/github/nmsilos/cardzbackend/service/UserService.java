@@ -2,11 +2,13 @@ package com.github.nmsilos.cardzbackend.service;
 
 import com.github.nmsilos.cardzbackend.dto.user.UserRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
+import com.github.nmsilos.cardzbackend.exception.custom.RequiredFieldMissingException;
 import com.github.nmsilos.cardzbackend.mapper.UserMapper;
 import com.github.nmsilos.cardzbackend.model.User;
 import com.github.nmsilos.cardzbackend.repository.UserRepository;
 import com.github.nmsilos.cardzbackend.security.Cripter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +26,13 @@ public class UserService {
     @Transactional
     public UserResponseDTO register(UserRequestDTO user) {
         User newUser = mapper.toEntity(user);
-        newUser.setPassword(Cripter.criptografar(user.getPassword()));
-        repository.save(newUser);
+        try {
+            newUser.setPassword(Cripter.criptografar(user.getPassword()));
+            repository.save(newUser);
+        }
+        catch (DataIntegrityViolationException ex) {
+            throw new RequiredFieldMissingException("Non-nullable fields are mandatory");
+        }
         return mapper.toResponse(newUser);
     }
 
