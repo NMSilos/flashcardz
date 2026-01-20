@@ -1,5 +1,6 @@
 package com.github.nmsilos.cardzbackend.dto.deck;
 
+import com.github.nmsilos.cardzbackend.dto.card.CardResponseDTO;
 import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
 import com.github.nmsilos.cardzbackend.model.Card;
 
@@ -20,6 +21,6 @@ public class DeckResponseDTO {
     private String name;
     private Date creationDate;
     private UUID userId;
-    private List<Card> cards;
+    private List<CardResponseDTO> cards;
 
 }

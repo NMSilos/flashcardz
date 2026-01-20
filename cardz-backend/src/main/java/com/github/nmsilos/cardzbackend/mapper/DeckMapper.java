@@ -6,7 +6,7 @@ import com.github.nmsilos.cardzbackend.model.Deck;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = CardMapper.class)
 public interface DeckMapper {
 
     Deck toEntity(DeckRequestDTO deck);

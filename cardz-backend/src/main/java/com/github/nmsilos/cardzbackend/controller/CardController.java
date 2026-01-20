@@ -3,7 +3,6 @@ package com.github.nmsilos.cardzbackend.controller;
 import com.github.nmsilos.cardzbackend.dto.card.CardRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.card.CardResponseDTO;
 import com.github.nmsilos.cardzbackend.dto.card.CardUpdateDTO;
-import com.github.nmsilos.cardzbackend.model.Card;
 import com.github.nmsilos.cardzbackend.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
