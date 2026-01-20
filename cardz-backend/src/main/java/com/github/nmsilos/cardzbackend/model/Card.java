@@ -37,11 +37,11 @@ public class Card {
     @JoinColumn(name = "deck_id")
     private Deck deck;
 
-    @PrePersist
+    /*@PrePersist
     public void prePersist() {
         if (id == null) {
             id = UuidCreator.getTimeOrderedEpoch();
         }
-    }
+    }*/
 
 }
