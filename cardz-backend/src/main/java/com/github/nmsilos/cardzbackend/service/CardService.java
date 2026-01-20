@@ -4,12 +4,16 @@ import com.github.f4b6a3.uuid.UuidCreator;
 import com.github.nmsilos.cardzbackend.dto.card.CardRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.card.CardResponseDTO;
 import com.github.nmsilos.cardzbackend.dto.card.CardUpdateDTO;
+import com.github.nmsilos.cardzbackend.exception.custom.RequiredFieldMissingException;
+import com.github.nmsilos.cardzbackend.exception.custom.ResourceNotFoundException;
 import com.github.nmsilos.cardzbackend.mapper.CardMapper;
 import com.github.nmsilos.cardzbackend.model.Card;
 import com.github.nmsilos.cardzbackend.model.Deck;
 import com.github.nmsilos.cardzbackend.repository.CardRepository;
 import com.github.nmsilos.cardzbackend.repository.DeckRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,28 +33,38 @@ public class CardService {
 
     @Transactional
     public CardResponseDTO create(CardRequestDTO card) {
-        Deck deck = deckRepository.getReferenceById(card.getDeckId());
-        Card newCard = repository.save(buildCard(card));
-        return mapper.toResponse(newCard);
+        try {
+            Deck deck = deckRepository.getReferenceById(card.getDeckId());
+            Card newCard = repository.save(buildCard(card));
+            return mapper.toResponse(newCard);
+        }
+        catch (DataIntegrityViolationException ex) {
+            throw new RequiredFieldMissingException("Non-nullable fields are mandatory");
+        }
     }
 
     @Transactional(readOnly = true)
     public CardResponseDTO getCardById(UUID id) {
-        Card card = repository.findById(id).orElse(null);
+        Card card = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Card not found"));
         return mapper.toResponse(card);
     }
 
     @Transactional
     public CardResponseDTO update(CardUpdateDTO card) {
-        Card oldCard = repository.getReferenceById(card.getId());
-        if (card.getFront() != null) {
-            oldCard.setFront(card.getFront());
+        try {
+            Card oldCard = repository.getReferenceById(card.getId());
+            if (card.getFront() != null) {
+                oldCard.setFront(card.getFront());
+            }
+            if (card.getBack() != null) {
+                oldCard.setBack(card.getBack());
+            }
+            repository.save(oldCard);
+            return mapper.toResponse(oldCard);
         }
-        if (card.getBack() != null) {
-            oldCard.setBack(card.getBack());
+        catch (EntityNotFoundException ex) {
+            throw new ResourceNotFoundException("Card not found");
         }
-        repository.save(oldCard);
-        return mapper.toResponse(oldCard);
     }
 
     @Transactional

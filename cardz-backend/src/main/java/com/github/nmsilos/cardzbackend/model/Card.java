@@ -1,6 +1,5 @@
 package com.github.nmsilos.cardzbackend.model;
 
-import com.github.f4b6a3.uuid.UuidCreator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,12 +35,5 @@ public class Card {
     @ManyToOne
     @JoinColumn(name = "deck_id")
     private Deck deck;
-
-    /*@PrePersist
-    public void prePersist() {
-        if (id == null) {
-            id = UuidCreator.getTimeOrderedEpoch();
-        }
-    }*/
 
 }
