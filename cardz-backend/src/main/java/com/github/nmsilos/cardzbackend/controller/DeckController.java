@@ -2,6 +2,7 @@ package com.github.nmsilos.cardzbackend.controller;
 
 import com.github.nmsilos.cardzbackend.dto.deck.DeckRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.deck.DeckResponseDTO;
+import com.github.nmsilos.cardzbackend.dto.deck.DeckUpdateDTO;
 import com.github.nmsilos.cardzbackend.model.Deck;
 import com.github.nmsilos.cardzbackend.service.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +25,12 @@ public class DeckController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<Deck> getDeckById(@PathVariable UUID id) {
+    private ResponseEntity<DeckResponseDTO> getDeckById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getDeckById(id));
     }
 
     @PutMapping("/update")
-    private ResponseEntity<Deck> update(@RequestBody Deck deck) {
+    private ResponseEntity<DeckResponseDTO> update(@RequestBody DeckUpdateDTO deck) {
         return ResponseEntity.status(HttpStatus.OK).body(service.update(deck));
     }
 
