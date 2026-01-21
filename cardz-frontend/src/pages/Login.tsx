@@ -1,4 +1,22 @@
+import { useState } from "react";
+import { loginRequest } from "../services/auth.service";
+
 export default function Login() {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  async function login (e: React.FormEvent) {
+    e.preventDefault();
+    const data = { email, password };
+    
+    const response = await loginRequest(data);
+    if (response.status === 200) {
+      const { token } = response.data;
+      localStorage.setItem('token', token);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
       <div className="w-full max-w-md bg-zinc-800 rounded-2xl shadow-xl p-8">
@@ -10,7 +28,7 @@ export default function Login() {
           Entre para continuar estudando
         </p>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={login}>
           <div>
             <label className="block text-sm text-zinc-400 mb-1">
               Email
@@ -24,6 +42,8 @@ export default function Login() {
                 border border-zinc-700
                 focus:outline-none focus:ring-2 focus:ring-indigo-600
               "
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -40,6 +60,8 @@ export default function Login() {
                 border border-zinc-700
                 focus:outline-none focus:ring-2 focus:ring-indigo-600
               "
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
