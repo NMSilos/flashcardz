@@ -30,21 +30,19 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            String username = tokenManager.getSubject(token);
+            String email = tokenManager.getSubject(token);
 
-            if (username != null) {
-                var user = userRepository.findByUsername(username);
-                if (user == null) {
-                    user = userRepository.findByUsername(username);
-                }
-
-                if (user != null) {
-                    var authentication =
-                            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                } else {
-                    System.out.println("Usuário não encontrado para username do token: " + username);
-                }
+            if (email != null) {
+                userRepository.findByEmail(email)
+                        .ifPresent(user -> {
+                            var authentication =
+                                    new UsernamePasswordAuthenticationToken(
+                                            user,
+                                            null,
+                                            user.getAuthorities()
+                                    );
+                            SecurityContextHolder.getContext().setAuthentication(authentication);
+                        });
             } else {
                 System.out.println("Token inválido ou expirado.");
             }

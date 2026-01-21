@@ -1,5 +1,7 @@
 package com.github.nmsilos.cardzbackend.controller;
 
+import com.github.nmsilos.cardzbackend.dto.login.LoginDTO;
+import com.github.nmsilos.cardzbackend.dto.login.TokenDTO;
 import com.github.nmsilos.cardzbackend.dto.user.UserRequestDTO;
 import com.github.nmsilos.cardzbackend.dto.user.UserResponseDTO;
 import com.github.nmsilos.cardzbackend.service.UserService;
@@ -20,6 +22,12 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(@RequestBody UserRequestDTO user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.register(user));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO data) {
+        TokenDTO token = service.login(data);
+        return ResponseEntity.ok().body(token);
     }
 
     @GetMapping("/{id}")

@@ -17,14 +17,16 @@ public class TokenManager {
     @Value("${jwt.secretkey}")
     private String secretKey;
 
+    private static final String ISSUER = "flashcardz-api";
+
     public String generateToken(User user) {
         try {
             var algorithm = Algorithm.HMAC256(secretKey);
             return JWT.create()
-                    .withIssuer("Minha API")
-                    .withSubject(user.getUsername())
+                    .withIssuer(ISSUER)
+                    .withSubject(user.getEmail())
                     .withClaim("id", user.getId().toString())
-                    .withClaim("email", user.getEmail())
+                    .withClaim("username", user.getUsername())
                     .withExpiresAt(dataExpiracao())
                     .sign(algorithm);
         } catch (Exception e) {
@@ -37,7 +39,7 @@ public class TokenManager {
         try {
             var algorithm = Algorithm.HMAC256(secretKey);
             return JWT.require(algorithm)
-                    .withIssuer("flashcardz-api")
+                    .withIssuer(ISSUER)
                     .build()
                     .verify(token)
                     .getSubject();

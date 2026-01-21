@@ -1,5 +1,6 @@
 package com.github.nmsilos.cardzbackend.exception;
 
+import com.github.nmsilos.cardzbackend.exception.custom.InvalidUserException;
 import com.github.nmsilos.cardzbackend.exception.custom.RequiredFieldMissingException;
 import com.github.nmsilos.cardzbackend.exception.custom.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<ErrorMessage> invalidUserException(InvalidUserException ex, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorMessage(request, HttpStatus.FORBIDDEN, ex.getMessage()));
+    }
 
     @ExceptionHandler(RequiredFieldMissingException.class)
     public ResponseEntity<ErrorMessage> requiredFieldMissingException(RequiredFieldMissingException ex, HttpServletRequest request) {

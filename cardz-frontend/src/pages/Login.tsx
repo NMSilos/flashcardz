@@ -3,7 +3,7 @@ export default function Login() {
     <div className="min-h-screen bg-zinc-900 flex items-center justify-center">
       <div className="w-full max-w-md bg-zinc-800 rounded-2xl shadow-xl p-8">
         <h1 className="text-3xl font-bold text-white text-center mb-2">
-          Cardz
+          Flashcardz
         </h1>
 
         <p className="text-zinc-400 text-center mb-8">
