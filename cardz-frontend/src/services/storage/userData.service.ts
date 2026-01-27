@@ -1,5 +1,3 @@
-// src/services/storage/userData.storage.ts
-
 import type { UserData } from "../../types/UserData"
 
 export const USER_DATA_KEY = (userId: string) =>

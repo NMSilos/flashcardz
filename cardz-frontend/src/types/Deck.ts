@@ -7,3 +7,8 @@ export type Deck = {
   creationDate: string
   cards: Card[]
 }
+
+export type CreateDeckData = {
+  name: string
+  user: { id: string }
+}

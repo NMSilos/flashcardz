@@ -4,6 +4,8 @@ import { getPayloadFromToken } from "../services/auth.service";
 import { getUserByIdRequest } from "../services/user.service";
 import type { Deck } from "../types/Deck";
 import { getUserData } from "../services/storage/userData.service";
+import CreateDeckModal from "../components/modals/CreateDeckModal"; 
+import { useNavigate } from "react-router";
 
 export default function Dashboard() {
 
@@ -11,6 +13,8 @@ export default function Dashboard() {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [reviews, setReviews] = useState(0);
   const [username, setUsername] = useState("Usuário");
+  const [isCreateDeckOpen, setIsCreateDeckOpen] = useState(false);
+  const navigate = useNavigate()
 
   async function fetchUserData() {
     const payload = getPayloadFromToken();
@@ -34,6 +38,10 @@ export default function Dashboard() {
     const userData = getUserData(payload!.id);
     setReviews(userData.reviewsToday);
   }, []);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [isCreateDeckOpen]);
 
   return (
     <AppLayout>
@@ -65,7 +73,13 @@ export default function Dashboard() {
 
           <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2">
             {decks.map((deck) => (
-              <DeckItem key={deck.id} name={deck.name} cards={deck.cards.length} />
+              <DeckItem 
+                key={deck.id} 
+                id={deck.id}
+                name={deck.name} 
+                cards={deck.cards.length}
+                onClick={() => navigate(`/deck/${deck.id} `)}
+              />
             ))}
           </div>
         </div>
@@ -78,10 +92,15 @@ export default function Dashboard() {
 
           <div className="space-y-3">
             <ActionButton label="Estudar agora" />
-            <ActionButton label="Criar novo deck" secondary />
+            <ActionButton 
+              label="Criar novo deck" 
+              secondary
+              onClick={() => setIsCreateDeckOpen(true)} 
+            />
           </div>
         </div>
       </div>
+      <CreateDeckModal open={isCreateDeckOpen} onClose={() => setIsCreateDeckOpen(false)} />
     </AppLayout>
   );
 }
@@ -104,14 +123,17 @@ function StatCard({ title, value }: { title: string; value: string }) {
   );
 }
 
-function DeckItem({ name, cards }: { name: string; cards: number }) {
+function DeckItem({ name, cards, onClick }: { name: string; cards: number; onClick: () => void }) {
   return (
-    <div className="
-      flex items-center justify-between
-      p-4 rounded-xl
-      bg-slate-900 hover:bg-slate-700
-      transition cursor-pointer
-    ">
+    <div
+      onClick={onClick}
+      className="
+        flex items-center justify-between
+        p-4 rounded-xl
+        bg-slate-900 hover:bg-slate-700
+        transition cursor-pointer
+      "
+    >
       <div>
         <h3 className="font-medium">
           {name}
@@ -125,18 +147,21 @@ function DeckItem({ name, cards }: { name: string; cards: number }) {
         Abrir →
       </span>
     </div>
-  );
+  )
 }
 
 function ActionButton({
   label,
   secondary = false,
+  onClick,
 }: {
-  label: string;
-  secondary?: boolean;
+  label: string
+  secondary?: boolean
+  onClick?: () => void
 }) {
   return (
     <button
+      onClick={onClick}
       className={`
         w-full py-3 rounded-xl font-semibold transition
         ${secondary
@@ -147,5 +172,5 @@ function ActionButton({
     >
       {label}
     </button>
-  );
+  )
 }
