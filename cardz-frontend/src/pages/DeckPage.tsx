@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import AppLayout from "../layouts/AppLayout"
+import { getDeckById } from "../services/deck.service"
+import CreateCardModal from "../components/modals/CreateCardModal"
 
 type Card = {
   id: string
@@ -9,20 +11,22 @@ type Card = {
 }
 
 export default function DeckPage() {
-  const { deckId } = useParams()
+  const { deckId } = useParams();
 
-  const [deckName, setDeckName] = useState("Nome do Deck")
-  const [cards, setCards] = useState<Card[]>([])
+  const [deckName, setDeckName] = useState("Nome do Deck");
+  const [cards, setCards] = useState<Card[]>([]);
+  const [isCreateCardOpen, setIsCreateCardOpen] = useState(false);
+
+  async function fetchDeckData(deckId: string) {
+    const response = await getDeckById(deckId);
+    console.log(response.data);
+    setDeckName(response.data.name);
+    setCards(response.data.cards);
+  }
 
   useEffect(() => {
-    // MOCK TEMPORÁRIO
-    setDeckName("Java • Spring Boot")
-    setCards([
-      { id: "1", front: "O que é Injeção de Dependência?", back: "Padrão que desacopla dependências" },
-      { id: "2", front: "@Component vs @Service", back: "Especializações semânticas" },
-      { id: "3", front: "O que é JPA?", back: "Java Persistence API" },
-    ])
-  }, [deckId])
+    fetchDeckData(deckId!);
+  }, [deckId, isCreateCardOpen])
 
   return (
     <AppLayout>
@@ -39,7 +43,7 @@ export default function DeckPage() {
 
         <div className="flex gap-3">
           <PrimaryButton label="Estudar" />
-          <SecondaryButton label="Adicionar carta" />
+          <SecondaryButton label="Adicionar carta" onClick={() => setIsCreateCardOpen(true)}/>
         </div>
       </div>
 
@@ -77,6 +81,7 @@ export default function DeckPage() {
           </div>
         )}
       </div>
+      <CreateCardModal open={isCreateCardOpen} onClose={() => setIsCreateCardOpen(false)} />
     </AppLayout>
   )
 }
@@ -148,7 +153,7 @@ function PrimaryButton({ label }: { label: string }) {
   )
 }
 
-function SecondaryButton({ label }: { label: string }) {
+function SecondaryButton({ label, onClick }: { label: string; onClick?: () => void }) {
   return (
     <button
       className="
@@ -156,6 +161,7 @@ function SecondaryButton({ label }: { label: string }) {
         bg-slate-700 text-slate-100 hover:bg-slate-600
         transition
       "
+      onClick={onClick}
     >
       {label}
     </button>

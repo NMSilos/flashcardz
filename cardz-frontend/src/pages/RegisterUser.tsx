@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { loginRequest, registerRequest } from "../services/auth.service";
+import { registerRequest } from "../services/auth.service";
 import Swal from "sweetalert2";
 import 'sweetalert2/themes/bulma.css'
 import { useNavigate } from "react-router";

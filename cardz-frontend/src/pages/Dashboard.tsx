@@ -75,7 +75,6 @@ export default function Dashboard() {
             {decks.map((deck) => (
               <DeckItem 
                 key={deck.id} 
-                id={deck.id}
                 name={deck.name} 
                 cards={deck.cards.length}
                 onClick={() => navigate(`/deck/${deck.id} `)}

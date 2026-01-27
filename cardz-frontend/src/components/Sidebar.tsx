@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <aside
       className={`
