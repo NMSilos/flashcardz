@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import AppLayout from "../layouts/AppLayout";
 import { getPayloadFromToken } from "../services/auth.service";
 import { getUserByIdRequest } from "../services/user.service";
-import type { Deck } from "../types/jwt";
+import type { Deck } from "../types/Deck";
+import { getUserData } from "../services/storage/userData.service";
 
 export default function Dashboard() {
 
   const [user, setUser] = useState(null);
   const [decks, setDecks] = useState<Deck[]>([]);
+  const [reviews, setReviews] = useState(0);
   const [username, setUsername] = useState("Usuário");
 
   async function fetchUserData() {
@@ -28,6 +30,9 @@ export default function Dashboard() {
       setUsername(payload.username);
     }
     fetchUserData();
+
+    const userData = getUserData(payload!.id);
+    setReviews(userData.reviewsToday);
   }, []);
 
   return (
@@ -46,7 +51,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard title="Decks" value={`${decks.length}`} />
         <StatCard title="Cartas" value={`${totalCards.toString()}`} />
-        <StatCard title="Revisões hoje" value="34" />
+        <StatCard title="Revisões hoje" value={`${reviews}`} />
         <StatCard title="Sequência" value="7 dias" />
       </div>
 
@@ -58,9 +63,9 @@ export default function Dashboard() {
             Meus Decks
           </h2>
 
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-[420px] overflow-y-auto pr-2">
             {decks.map((deck) => (
-              <DeckItem name={deck.name} cards={deck.cards.length} />
+              <DeckItem key={deck.id} name={deck.name} cards={deck.cards.length} />
             ))}
           </div>
         </div>

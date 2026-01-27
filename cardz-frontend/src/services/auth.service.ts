@@ -7,8 +7,18 @@ export type LoginCredentials = {
   password: string
 }
 
+export type RegisterCredentials = {
+  username: string
+  email: string
+  password: string
+}
+
 export const loginRequest = (data: LoginCredentials) => {
   return api.post('/api/users/login', data)
+}
+
+export const registerRequest = (data: RegisterCredentials) => {
+  return api.post('/api/users/register', data);
 }
 
 export const getPayloadFromToken = () => {
@@ -18,4 +28,8 @@ export const getPayloadFromToken = () => {
     return payload;
   }
   return null;
+}
+
+export function isAuthenticated() {
+  return !!localStorage.getItem('token');
 }
