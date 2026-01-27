@@ -17,6 +17,7 @@ export default function CreateDeckModal({ open, onClose }: Props) {
         const payload = getPayloadFromToken();
         const response = await createDeck({ name, user: { id: payload!.id }});
         if (response.status === 201) {
+            setName('');
             onClose();
         } else {
             Swal.fire({
@@ -53,7 +54,7 @@ export default function CreateDeckModal({ open, onClose }: Props) {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Ex: Java • Spring Boot"
+                placeholder="Ex: Estudo de Inglês"
                 className="
                     w-full mt-1 px-4 py-3 rounded-xl
                     bg-slate-900 text-white

@@ -20,6 +20,8 @@ export default function CreateDeckModal({ open, onClose }: Props) {
         const data = { front, back, deckId };
         const response = await createCard(data as CreateCardData);
         if (response.status === 201) {
+            setFront('');
+            setBack('');
             onClose();
         } else {
             Swal.fire({
@@ -56,7 +58,7 @@ export default function CreateDeckModal({ open, onClose }: Props) {
                 type="text"
                 value={front}
                 onChange={(e) => setFront(e.target.value)}
-                placeholder="Ex: Java • Spring Boot"
+                placeholder="Ex: Please"
                 className="
                     w-full mt-1 px-4 py-3 rounded-xl
                     bg-slate-900 text-white
@@ -74,7 +76,7 @@ export default function CreateDeckModal({ open, onClose }: Props) {
                 type="text"
                 value={back}
                 onChange={(e) => setBack(e.target.value)}
-                placeholder="Ex: Java • Spring Boot"
+                placeholder="Ex: Por favor"
                 className="
                     w-full mt-1 px-4 py-3 rounded-xl
                     bg-slate-900 text-white
